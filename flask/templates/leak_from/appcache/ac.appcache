@@ -1,0 +1,13 @@
+CACHE MANIFEST
+# ...
+
+CACHE:
+{{ base_url }}?leak=appcache-cache
+
+# Won't make an initial request
+NETWORK:
+{{ base_url }}?leak=appcache-network
+
+# Must be same-origin, but just to be thorough
+FALLBACK:
+{{ base_url }}?leak=appcache-fallback

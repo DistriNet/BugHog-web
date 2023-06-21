@@ -1,0 +1,14 @@
+{% extends 'base_selenium_test.html' %}
+
+{% block evaluation_script %}
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                result_indicator.innerText = "SUCCESS";
+            })
+            .catch(function (err) {
+                result_indicator.innerText = "FAIL";
+            });
+    }
+
+{% endblock %}

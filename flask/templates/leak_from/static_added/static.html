@@ -1,0 +1,65 @@
+<!DOCTYPE html SYSTEM "{{ base_url }}?leak=doctype">
+<html xmlns="https://www.w3.org/1999/xhtml" manifest="{{ base_url }}?leak=html-manifest">
+<head profile="{{ base_url }}?leak=head-profile">
+
+    <!--
+    %Conditional Comments
+    -->
+    <!--[if true]>
+    <link href="{{ base_url }}?leak=conditional-comment-1" rel="stylesheet">
+    <![endif]-->
+
+    <link rel="preload" as="image" imagesrcset=",,,,,{{ base_url }}?leak=link-preload-imagesrcset" />
+</head>
+<body>
+
+    <!--
+    %CSS
+    -->
+    <style>@import '{{ url_for("leak_from.css_added", scheme=scheme, _external=True, _scheme="https", suite_name=suite_name, policy=policy) }}';</style>
+
+    <!--
+    %Portal
+    -->
+    <portal src="{{ base_url }}?leak=portal-src"></portal>
+
+
+    <big>DEF</big>
+    <big>GHI</big>
+    <!--
+    %Inline CSS
+    -->
+    <b style="
+    list-style: url({{ base_url }}?leak=inline-css-list-style);
+    list-style-image: url&#40;{{ base_url }}?leak=inline-css-list-style-image&#41;;
+    background: url&#x28;{{ base_url }}?leak=inline-css-background&#x29;;
+    background-image: url&lpar;{{ base_url }}?leak=inline-css-background-image&rpar;;
+    border-image: url({{ base_url }}?leak=inline-css-list-style-image);
+    -moz-border-image: url({{ base_url }}?leak=inline-css--moz-background-image-alias);
+    -webkit-border-image: url({{ base_url }}?leak=inline-css--webkit-background-image-alias);
+    border-image-source: url({{ base_url }}?leak=inline-css-border-image-source);
+    shape-outside: url({{ base_url }}?leak=inline-css-shape-outside);
+    -webkit-shape-outside: url({{ base_url }}?leak=inline-css--webkit-shape-outside-alias);
+    -webkit-mask-image: url({{ base_url }}?leak=inline-css--webkit-mask-image);
+    -webkit-mask-box-image: url({{ base_url }}?leak=inline-css--webkit-mask-box-image);
+    -webkit-mask-box-image-source: url({{ base_url }}?leak=inline-css--webkit-mask-box-image-source);
+    cursor: url({{ base_url }}?leak=inline-css-cursor), auto;
+    ">MNO</b>
+
+    <svg>
+        <font-face-uri xlink:href="{{ base_url }}?leak=svg-font-face-uri" />
+    </svg>
+
+    <script language="xml">
+        <!DOCTYPE html SYSTEM "{{ base_url }}?leak=script-doctype">
+    </script>
+    <xml>
+        <!DOCTYPE html SYSTEM "{{ base_url }}?leak=xml-doctype">
+    </xml>
+
+    <line xmlns="urn:schemas-microsoft-com:vml" style="behavior:url(#default#vml)">
+        <imageData style="behavior:url(#default#vml)" o:href="{{ base_url }}?leak=vml-line-imgdata-href" />
+    </line>
+
+</body>
+</html>

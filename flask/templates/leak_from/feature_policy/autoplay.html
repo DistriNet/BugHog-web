@@ -1,0 +1,53 @@
+{% extends 'base_selenium_test.html' %}
+
+{% block content %}
+
+<video id="video_autoplay_property" width="640" height="360" controls autoplay with muted>
+    <source src="{{ url_for('static', filename='SampleVideo_640x360_1mb.mp4', _external=True, _scheme=scheme) }}" type="video/mp4">
+</video>
+
+<video id="video_play_call" width="640" height="360" controls>
+    <source src="{{ url_for('static', filename='SampleVideo_640x360_1mb.mp4', _external=True, _scheme=scheme) }}" type="video/mp4">
+</video>
+
+{{ super() }}
+
+{% endblock %}
+
+{% block evaluation_script %}
+    {% if mechanism == "autoplay-property" %}
+
+    Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+        get: function(){
+            return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
+        }
+    });
+
+    var video_autoplay_property = document.getElementById("video_autoplay_property");
+    setTimeout(function() {
+        if (video_autoplay_property.playing) {
+            result_indicator.innerText = "SUCCESS"
+        } else {
+            result_indicator.innerText = "FAIL"
+        }
+    }, 1000);
+
+    {% elif mechanism == "play-call" %}
+
+    var video_play_call = document.getElementById("video_play_call");
+    var promise = video_play_call.play();
+    if (promise !== undefined) {
+        promise.then(() => {
+            result_indicator.innerText = "SUCCESS";
+        }).catch(err => {
+            result_indicator.innerText = "FAIL";
+        });
+    }
+
+    {% else %}
+
+    result_indicator.innerText = "ERROR";
+
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<iframe src="{{ url_for('leak_from.test_suites', suite=suite, group=group, scheme=scheme, arg=arg) }}"></iframe>
+{% endblock %}

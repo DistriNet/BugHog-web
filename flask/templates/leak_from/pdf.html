@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <meta http-equiv="refresh" content="1; url={{ url_for('leak_from.pdf', scheme=scheme, suite_name=suite_name, policy=policy, manner='redirect') }}">
+    <iframe src="{{ url_for('leak_from.pdf', scheme=scheme, suite_name=suite_name, policy=policy, manner='iframe') }}"></iframe>
+{% endblock %}

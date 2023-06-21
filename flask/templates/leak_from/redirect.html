@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if type is defined %}
+        {% if type == "meta-refresh" %}
+            <meta http-equiv="refresh" content="0; url={{url}}">
+        {% elif type == "redirect-winloc" %}
+            <script>
+                window.location='{{url}}';
+            </script>
+        {% elif type == "form-GET" %}
+            <form id='toSubmit' action='{{url}}' method='get'>
+                <input name='leak' value='form-GET' type='hidden'>
+            </form>
+            <script>
+                document.getElementById('toSubmit').submit();
+            </script>"
+        {% elif type == "form-POST" %}
+            <form id='toSubmit' action='{{url}}' method='post'>
+                <input name='leak' value='form-POST' type='hidden'>
+            </form>
+            <script>
+                document.getElementById('toSubmit').submit();
+            </script>"
+        {% else %}
+            <p>No supported type parameter</p>
+        {% endif %}
+    {% endif%}
+
+    <p id='message'>To be redirected</p>
+{% endblock %}

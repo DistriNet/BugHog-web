@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="prerender" href="{{ url_for('leak_from.js_script', scheme=scheme, suite_name=suite_name, policy=policy) }}"/>
+{% endblock %}
+
+{% block content %}
+<p id='check'>ScriptTest</p>
+<script src="{{ url_for('leak_from.js_script', scheme=scheme, suite_name=suite_name, policy=policy) }}"></script>
+{% endblock %}

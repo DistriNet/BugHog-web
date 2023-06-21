@@ -1,0 +1,24 @@
+{% extends 'base_selenium_test.html' %}
+
+
+{% block evaluation_script %}
+    function startCapture(displayMediaOptions) {
+        let captureStream = null;
+
+        navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+            .then(function () {
+                result_indicator.innerText = "SUCCESS";
+            })
+            .catch(function () {
+                result_indicator.innerText = "FAIL";
+            });
+    }
+
+    const gdmOptions = {
+        video: true,
+        audio: true
+    };
+
+    startCapture(gdmOptions);
+
+{% endblock %}

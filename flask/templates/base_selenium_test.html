@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!--
+This element is read by the framework to infer the outcome of the experiment
+It has 4 different states:
+    - "Awaiting result...": the experiment has not concluded yet.
+    - "SUCCESS": the experiment has concluded to a success.
+    - "FAIL": the experiment has concluded to a fail.
+    - "ERROR": an error occurred.
+ -->
+<p id="result_indicator">Awaiting result...</p>
+
+<!--
+This element can be used as a visual indicator for manual testing purposes.
+-->
+<p id="visual_indicator"></p>
+
+<script>
+    var result_indicator = document.getElementById("result_indicator");
+    var visual_indicator = document.getElementById("visual_indicator");
+
+    try {
+    {% block evaluation_script %}
+    {% endblock %}
+    } catch(err) {
+        result_indicator.innerText = "ERROR";
+        visual_indicator.innerText = "ERROR: " + err.message;
+    }
+</script>
+
+{% endblock %}

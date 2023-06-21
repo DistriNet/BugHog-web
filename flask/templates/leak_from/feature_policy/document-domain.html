@@ -1,0 +1,17 @@
+{% extends 'base_selenium_test.html' %}
+
+
+{% block evaluation_script %}
+
+    var currDomain = document.domain;
+
+    visual_indicator.innerText = currDomain;
+
+    try {
+        document.domain = "leak.test";
+        result_indicator.innerText = "SUCCESS";
+    } catch(err) {
+        result_indicator.innerText = "FAIL";
+    }
+
+{% endblock %}

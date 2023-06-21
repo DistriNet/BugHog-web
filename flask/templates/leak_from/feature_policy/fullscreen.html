@@ -1,0 +1,23 @@
+{% extends 'base_selenium_test.html' %}
+
+{% block content %}
+
+<video id="video" width="640" height="360" controls>
+    <source src="{{ url_for('static', filename='SampleVideo_640x360_1mb.mp4', _external=True, _scheme=scheme) }}" type="video/mp4">
+</video>
+
+{{ super() }}
+
+{% endblock %}
+
+{% block evaluation_script %}
+
+    var video = document.getElementById("video");
+
+    video.requestFullscreen().then(function (stream) {
+        result_indicator.innerText = "SUCCESS";
+    }).catch(function (err) {
+        result_indicator.innerText = "FAIL";
+    });
+
+{% endblock %}

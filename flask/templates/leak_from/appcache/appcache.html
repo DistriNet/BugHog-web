@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block top_html %} <html manifest="{{ url_for('leak_from.appcache_manifest', _external=True, encoded_base_url=encoded_base_url) }}"> {% endblock %}
+
+{% block content %}
+<html manifest="{{ url_for('leak_from.appcache_manifest', _external=True, _scheme=scheme, encoded_base_url=encoded_base_url) }}">
+</html>
+{% endblock %}

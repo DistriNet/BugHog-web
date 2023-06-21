@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<iframe src="{{ url_for('iframe.test_suites_embed_iframe', suite='basic', group=group, scheme=scheme, arg=arg) }}" csp="default-src 'none'"></iframe>
+{% endblock %}

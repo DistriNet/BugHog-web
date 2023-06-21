@@ -1,0 +1,105 @@
+/*# sourceMappingURL={{ base_url }}?leak=css-source-map */
+
+@import '{{ base_url }}?leak=css-import-string';
+@import url({{ base_url }}?leak=css-import-url);
+a:after {
+    content: url({{ base_url }}?leak=css-after-content)
+}
+
+a::after {
+    content: url({{ base_url }}?leak=css-after-content-2)
+}
+
+a:before {
+    content: url({{ base_url }}?leak=css-before-content)
+}
+
+a::before {
+    content: url({{ base_url }}?leak=css-before-content-2)
+}
+
+big {
+    list-style: url({{ base_url }}?leak=css-list-style);
+    list-style-image: url({{ base_url }}?leak=css-list-style-image);
+    background: url({{ base_url }}?leak=css-background);
+    background-image: url({{ base_url }}?leak=css-background-image);
+    border-image: url({{ base_url }}?leak=css-border-image);
+    -moz-border-image: url({{ base_url }}?leak=css--moz-background-image-alias);
+    -webkit-border-image: url({{ base_url }}?leak=css--webkit-background-image-alias);
+    border-image-source: url({{ base_url }}?leak=css-border-image-source);
+    shape-outside: url({{ base_url }}?leak=css-shape-outside);
+    -webkit-shape-outside: url({{ base_url }}?leak=css--webkit-shape-outside-alias);
+    -webkit-mask-image: url({{ base_url }}?leak=css--webkit-mask-image);
+    -webkit-mask-box-image: url({{ base_url }}?leak=css--webkit-mask-box-image);
+    -webkit-mask-box-image-source: url({{ base_url }}?leak=css--webkit-mask-box-image-source);
+    cursor: url({{ base_url }}?leak=css-cursor), auto;
+}
+
+/* Basic font-face */
+
+@font-face {
+    font-family: leak;
+    src: url({{ base_url }}?leak=css-font-face-src);
+}
+
+/*
+* Cross-browser font-face
+* IE6-8 will use the EOT source, modern browsers will use WOFF(2) and fallback to TTF in case of error
+* More info:
+* https://www.paulirish.com/2009/bulletproof-font-face-implementation-syntax/
+* https://caniuse.com/#search=eot
+* https://caniuse.com/#search=woff2
+* https://caniuse.com/#search=woff
+* https://caniuse.com/#search=ttf
+*/
+
+@font-face {
+    font-family: 'leak';
+    src: url('{{ base_url }}?leak=css-font-face-src-eot') format('eot'), url('{{ base_url }}?leak=css-font-face-src-woff') format('woff'), url('{{ base_url }}?leak=css-font-face-src-ttf') format('truetype');
+}
+
+big {
+    font-family: leak;
+}
+
+circle {
+    fill: url({{ base_url }}?leak=svg-css-fill#foo);
+    mask: url({{ base_url }}?leak=svg-css-mask#foo);
+    -webkit-mask: url({{ base_url }}?leak=svg-css--webkit-mask#foo);
+    filter: url({{ base_url }}?leak=svg-css-filter#foo);
+    clip-path: url({{ base_url }}?leak=svg-css-clip-path#foo);
+}
+
+s {
+    --leak: url({{ base_url }}?leak=css-variables);
+}
+
+s {
+    background: var(--leak);
+}
+
+s::after {
+    content: attr(foo url);
+}
+
+s::before {
+    content: attr(notpresent, url({{ base_url }}?leak=css-attr-fallback));
+}
+
+p#p1 {
+    background-image: \75 \72 \6C ( {
+            {
+            base_url
+        }
+    }
+    ?leak=css-escape-url-1);
+}
+
+p#p2 {
+    background-image: \000075\000072\00006C( {
+            {
+            base_url
+        }
+    }
+    ?leak=css-escape-url-2);
+}
