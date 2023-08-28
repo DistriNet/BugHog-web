@@ -8,5 +8,5 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./custom_pages:/custom_pages
-      - ./custom_resources:/app/static/custom
+      - ./experiments/pages:/experiments/pages
+      - ./experiments/resources:/app/static/resources

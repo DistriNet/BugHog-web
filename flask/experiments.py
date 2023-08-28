@@ -1,57 +1,48 @@
 import datetime
 import json
+import logging
 import os
 from urllib.parse import urlparse
-
 import requests
-from requests.exceptions import ConnectionError
-from custom_test_cases import test_cases
-from test_suites.test_suite import TestSuite
 
-from flask import (Blueprint, escape, make_response, render_template, request,
-                   send_file)
+from page_parser import load_experiment_pages
 
-aditioncom = "adition.com"
-subaditioncom = "sub.adition.com"
-subsubaditioncom = "sub.sub.adition.com"
+from flask import Blueprint, escape, make_response, render_template, request, send_file
 
-leak_to = Blueprint('leak_to', __name__, template_folder='templates/leak_to')
+ALLOWED_DOMAINS = [
+    'leak.test',
+    'site-a.test',
+    'site-b.test',
+    'sub.site-b.test',
+    'sub.sub.site-b.test',
+    'adition.com'
+]
+
+logger = logging.getLogger(__name__)
+experiment_pages = load_experiment_pages('/experiments/pages')
+exp_bp = Blueprint('experiments', __name__, template_folder="templates/leak_from")
 
 
-@leak_to.route('/', host=aditioncom)
-@leak_to.route('/', host=subaditioncom)
-@leak_to.route('/', host=subsubaditioncom)
+@exp_bp.before_request
+def before_request():
+    host = request.host.lower()
+    if host not in ALLOWED_DOMAINS:
+        logger.error(f'Host \'{host}\' is not supported by this framework. Supported hosts are {ALLOWED_DOMAINS}')
+        return f'Host \'{host}\' is not supported by this framework.'
+
+
+@exp_bp.route('/')
 def index():
-    return f"Requests are leaked to this website : {request.scheme}"
+    return f'This page is visited over <b>{request.scheme}</b>.'
 
 
-@leak_to.route('/sw.js', host=aditioncom)
-def custom_sw():
-    sw_script = request.args.get('script')
-    return sw_script, 200, {"Content-Type": "text/javascript"}
-
-
-@leak_to.route('/set_cookies/', host=aditioncom)
-def set_cookies():
-    cookie_exp_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
-    resp = make_response(render_template('set_cookies.html', title='Index'))
-    resp.set_cookie("generic", "1", expires=cookie_exp_date)
-    resp.set_cookie("secure", "1", expires=cookie_exp_date, secure=True)
-    resp.set_cookie("httpOnly", "1", expires=cookie_exp_date, httponly=True)
-    resp.set_cookie("lax", "1", expires=cookie_exp_date, samesite='lax')
-    resp.set_cookie("strict", "1", expires=cookie_exp_date, samesite='strict')
-    return resp
-
-
-@leak_to.route('/report/', methods=["GET", "POST"], host=aditioncom)
+@exp_bp.route('/report/', methods=["GET", "POST"])
 def report_leak():
     leak = request.args.get('leak')
     if leak is not None:
-        if leak == "link-prerender":
-            return render_template('prerender.html')
-        resp = make_response(render_template("set_cookies.html", title="Report", to_report=leak))
+        resp = make_response(render_template("cookies.html", title="Report", to_report=leak))
     else:
-        resp = make_response(render_template("set_cookies.html", title="Report", to_report="Nothing to report"))
+        resp = make_response(render_template("cookies.html", title="Report", to_report="Nothing to report"))
 
     cookie_exp_date = datetime.datetime.now() + datetime.timedelta(weeks=4)
     resp.set_cookie("generic", "1", expires=cookie_exp_date)
@@ -74,13 +65,13 @@ def report_leak():
             f"http://{remote_ip}:5001/report/",
             json=response_data
         )
-    except ConnectionError:
+    except requests.exceptions.ConnectionError:
         print(f'WARNING: Could not propagate request to collector at {remote_ip}:5000')
 
     return resp
 
 
-@leak_to.route('/report/if/using/<string:protocol>', host=aditioncom)
+@exp_bp.route('/report/if/using/<string:protocol>')
 def report_leak_if_using_http(protocol):
     """
     Forces request to /report/?leak=xxx if a request was received over a certain protocol.
@@ -92,7 +83,7 @@ def report_leak_if_using_http(protocol):
         return f"Request was not received over {protocol}", 200, {}
 
 
-@leak_to.route('/report/if/<string:expected_header_name>', host=aditioncom)
+@exp_bp.route('/report/if/<string:expected_header_name>')
 def report_leak_if_present(expected_header_name: str):
     """
     Forces request to /report/?leak=xxx if a request header by name of expected_header_name was received.
@@ -107,7 +98,7 @@ def report_leak_if_present(expected_header_name: str):
         return "Redirect", 307, {"Location": "https://adition.com/report/", "Allow-CSP-From": "*"}
 
 
-@leak_to.route('/report/if/<string:expected_header_name>/contains/<string:expected_header_value>', host=aditioncom)
+@exp_bp.route('/report/if/<string:expected_header_name>/contains/<string:expected_header_value>')
 def report_leak_if_contains(expected_header_name: str, expected_header_value: str):
     """
     Forces request to /report/?leak=xxx if a request header by name of expected_header_name with value expected_header_value was received.
@@ -124,19 +115,7 @@ def report_leak_if_contains(expected_header_name: str, expected_header_value: st
         return "Redirect", 307, {"Location": "https://adition.com/report/", "Allow-CSP-From": "*"}
 
 
-@leak_to.route("/embed/prerender/test/<string:scheme>/<string:group>/", defaults={'arg': None}, host=aditioncom)
-@leak_to.route('/embed/prerender/test/<string:scheme>/<string:group>/<string:arg>', host=aditioncom)
-def embed_prerender_test(scheme, group, arg):
-    suite = TestSuite.get_suite("basic", scheme)
-    return suite.render_response(group, arg)
-
-
-'''
-Custom test cases
-'''
-
-
-@leak_to.route("/resources/<path:path>", host=aditioncom)
+@exp_bp.route("/resources/<path:path>")
 def resources(path):
     file_path = os.path.join("/app/static/", path)
     if not os.path.isfile(file_path):
@@ -148,27 +127,25 @@ def resources(path):
     return send_file(file_path)
 
 
-@leak_to.route("/custom/<string:folder1>/<string:folder2>", host=aditioncom)
-@leak_to.route("/custom/<string:folder1>/<string:folder2>", host=subaditioncom)
-@leak_to.route("/custom/<string:folder1>/<string:folder2>", host=subsubaditioncom)
-def custom_test_cases(folder1, folder2):
+@exp_bp.route("/<string:project>/<string:experiment>/<string:page>")
+def custom_test_cases(project, experiment, page):
     host = urlparse(request.base_url).hostname
-    path = os.path.join(folder1, folder2)
+    path = os.path.join(project, experiment, page)
 
-    test_cases_str = escape(json.dumps(test_cases, indent=4))
-    if test_cases is None:
+    experiment_pages_str = escape(json.dumps(experiment_pages, indent=4))
+    if experiment_pages is None:
         return "Could not load any test cases", 404
-    if host not in test_cases:
-        return f"Could not find domain '{host}'<br>Test cases:<br>{test_cases_str}", 404
-    if path not in test_cases[host]:
-        return f"Could not find path '{path}' for domain '{host}'<br>Test cases:<br>{test_cases_str}", 404
+    if host not in experiment_pages:
+        return f"Could not find domain '{host}'<br>Test cases:<br>{experiment_pages_str}", 404
+    if path not in experiment_pages[host]:
+        return f"Could not find path '{path}' for domain '{host}'<br>Test cases:<br>{experiment_pages_str}", 404
 
-    content = test_cases[host][path]["content"]
+    content = experiment_pages[host][path]["content"]
     status = 200  # Default value
     # resp = make_response(render_template("custom", content=content))
     headers = dict()
-    if "headers" in test_cases[host][path]:
-        for header in test_cases[host][path]["headers"]:
+    if "headers" in experiment_pages[host][path]:
+        for header in experiment_pages[host][path]["headers"]:
             if header["key"] == "status":
                 status = header["value"]
             else:

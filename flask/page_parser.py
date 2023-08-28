@@ -3,15 +3,15 @@ import json
 
 ALLOWED_DOMAINS = [
     "leak.test",
-    "adition.com",
-    "sub.adition.com",
-    "sub.sub.adition.com",
-    "attack.er"
+    "site-A.test",
+    "site-B.test",
+    "sub.site-B.test",
+    "sub.sub.site-B.test"
+    "adition.com"
 ]
 
-test_cases = {}
 
-def load_custom_test_cases(config_folder_path: str):
+def load_experiment_pages(config_folder_path: str) -> dict:
     """
     Expected folder structure:
     - Project
@@ -19,6 +19,8 @@ def load_custom_test_cases(config_folder_path: str):
         - Domain
         - Subdir
     """
+    experiment_pages = {}
+
     folder_structure = get_folder_structure(config_folder_path)
     used_case_names = set()
 
@@ -34,21 +36,23 @@ def load_custom_test_cases(config_folder_path: str):
                 if domain['name'] not in ALLOWED_DOMAINS:
                     raise AttributeError(f"Domain '{domain['name']}' is not allowed ({project['name'], case['name']})")
 
-                if domain["name"] not in test_cases:
-                    test_cases[domain["name"]] = {}
+                if domain["name"] not in experiment_pages:
+                    experiment_pages[domain["name"]] = {}
 
                 subdirs = [subdir for subdir in domain["subfolders"] if subdir["is_folder"]]
                 for subdir in subdirs:
-                    url_path = os.path.join(case["name"], subdir["name"])
+                    url_path = os.path.join(project['name'], case['name'], subdir['name'])
 
-                    test_cases[domain["name"]][url_path] = {}
-                    test_cases[domain["name"]][url_path]["headers"] = get_headers(subdir["path"])
+                    experiment_pages[domain["name"]][url_path] = {}
+                    experiment_pages[domain["name"]][url_path]["headers"] = get_headers(subdir["path"])
 
                     content, content_type_header = get_content(subdir["path"])
-                    test_cases[domain["name"]][url_path]["content"] = content
+                    experiment_pages[domain["name"]][url_path]["content"] = content
 
-                    if not headers_contain_header(test_cases[domain["name"]][url_path]["headers"], "Content-Type"):
-                        test_cases[domain["name"]][url_path]["headers"].append(content_type_header)
+                    if not headers_contain_header(experiment_pages[domain["name"]][url_path]["headers"], "Content-Type"):
+                        experiment_pages[domain["name"]][url_path]["headers"].append(content_type_header)
+
+    return experiment_pages
 
 
 def read_content_file(file_path) -> str:
@@ -103,6 +107,7 @@ def headers_contain_header(headers: list, target_header: str) -> bool:
             return True
     return False
 
+
 def get_folder_structure(root_folder_path: str) -> list:
     folder_structure = []
     if not os.path.isdir(root_folder_path):
@@ -130,7 +135,3 @@ def get_all_subdirs(root_path: str) -> list:
             if os.path.isdir(case_folder_path):
                 subdirs.append(case_folder_path)
     return subdirs
-
-
-if __name__ == "__main__":
-    load_custom_test_cases("custom_pages")

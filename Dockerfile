@@ -28,4 +28,4 @@ CMD mkdir -p /var/log/uwsgi && \
     systemctl start website && \
     chmod 666 website.sock && \
     systemctl start nginx && \
-    tail -f /var/log/uwsgi/website.log
+    tail -f -n +1 /var/log/uwsgi/website.log
