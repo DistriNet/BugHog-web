@@ -117,7 +117,7 @@ def report_leak_if_contains(expected_header_name: str, expected_header_value: st
 
 @exp_bp.route("/resources/<path:path>")
 def resources(path):
-    file_path = os.path.join("/app/static/", path)
+    file_path = os.path.join("/app/static/resources/", path)
     if not os.path.isfile(file_path):
         return "Resource not found", 404
     if path.endswith(".swf"):
