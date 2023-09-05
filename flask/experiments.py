@@ -11,15 +11,15 @@ from flask import Blueprint, escape, make_response, render_template, request, se
 
 ALLOWED_DOMAINS = [
     'leak.test',
-    'site-a.test',
-    'site-b.test',
-    'sub.site-b.test',
-    'sub.sub.site-b.test',
+    'a.test',
+    'sub.a.test',
+    'sub.sub.a.test',
+    'b.test',
     'adition.com'
 ]
 
 logger = logging.getLogger(__name__)
-experiment_pages = load_experiment_pages('/experiments/pages')
+experiment_pages = load_experiment_pages('/experiments/pages', ALLOWED_DOMAINS)
 exp_bp = Blueprint('experiments', __name__, template_folder="templates/leak_from")
 
 

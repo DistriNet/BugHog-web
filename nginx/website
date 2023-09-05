@@ -27,58 +27,74 @@ server {
 
 server {
     listen 443 ssl;
+    server_name a.test;
+
+    ssl_certificate /app/ssl/a.test.crt;
+    ssl_certificate_key /app/ssl/a.test.key;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/app/website.sock;
+    }
+    location /static {
+        alias /app/static;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name sub.a.test;
+
+    ssl_certificate /app/ssl/sub.a.test.crt;
+    ssl_certificate_key /app/ssl/sub.a.test.key;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/app/website.sock;
+    }
+    location /static {
+        alias /app/static;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name sub.sub.a.test;
+
+    ssl_certificate /app/ssl/sub.sub.a.test.crt;
+    ssl_certificate_key /app/ssl/sub.sub.a.test.key;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/app/website.sock;
+    }
+    location /static {
+        alias /app/static;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name b.test;
+
+    ssl_certificate /app/ssl/b.test.crt;
+    ssl_certificate_key /app/ssl/b.test.key;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/app/website.sock;
+    }
+    location /static {
+        alias /app/static;
+    }
+}
+
+server {
+    listen 443 ssl;
     server_name adition.com;
 
     ssl_certificate /app/ssl/adition.com.crt;
     ssl_certificate_key /app/ssl/adition.com.key;
-
-    location / {
-        include uwsgi_params;
-        uwsgi_pass unix:/app/website.sock;
-    }
-    location /static {
-        alias /app/static;
-    }
-}
-
-server {
-    listen 443 ssl;
-    server_name sub.adition.com;
-
-    ssl_certificate /app/ssl/sub.adition.com.crt;
-    ssl_certificate_key /app/ssl/sub.adition.com.key;
-
-    location / {
-        include uwsgi_params;
-        uwsgi_pass unix:/app/website.sock;
-    }
-    location /static {
-        alias /app/static;
-    }
-}
-
-server {
-    listen 443 ssl;
-    server_name sub.sub.adition.com;
-
-    ssl_certificate /app/ssl/sub.sub.adition.com.crt;
-    ssl_certificate_key /app/ssl/sub.sub.adition.com.key;
-
-    location / {
-        include uwsgi_params;
-        uwsgi_pass unix:/app/website.sock;
-    }
-    location /static {
-        alias /app/static;
-    }
-}
-
-server {
-    listen 443 ssl;
-    server_name hsts-only.com;
-
-    ssl_certificate /app/ssl/hsts-only.com.crt;
-    ssl_certificate_key /app/ssl/hsts-only.com.key;
 
     location / {
         include uwsgi_params;

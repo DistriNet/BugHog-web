@@ -1,17 +1,8 @@
 import os
 import json
 
-ALLOWED_DOMAINS = [
-    "leak.test",
-    "site-A.test",
-    "site-B.test",
-    "sub.site-B.test",
-    "sub.sub.site-B.test"
-    "adition.com"
-]
 
-
-def load_experiment_pages(config_folder_path: str) -> dict:
+def load_experiment_pages(config_folder_path: str, allowed_domains: list[str]) -> dict:
     """
     Expected folder structure:
     - Project
@@ -33,7 +24,7 @@ def load_experiment_pages(config_folder_path: str) -> dict:
             used_case_names.add(case["name"])
             domains = [domain for domain in case["subfolders"] if domain["is_folder"]]
             for domain in domains:
-                if domain['name'] not in ALLOWED_DOMAINS:
+                if domain['name'] not in allowed_domains:
                     raise AttributeError(f"Domain '{domain['name']}' is not allowed ({project['name'], case['name']})")
 
                 if domain["name"] not in experiment_pages:
