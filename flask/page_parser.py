@@ -13,15 +13,11 @@ def load_experiment_pages(config_folder_path: str, allowed_domains: list[str]) -
     experiment_pages = {}
 
     folder_structure = get_folder_structure(config_folder_path)
-    used_case_names = set()
 
     projects = [project for project in folder_structure if project["is_folder"]]
     for project in projects:
         cases = [case for case in project["subfolders"] if case["is_folder"]]
         for case in cases:
-            if case["name"] in used_case_names:
-                raise AttributeError(f"Case '{case['name']}' is not unique over project folders")
-            used_case_names.add(case["name"])
             domains = [domain for domain in case["subfolders"] if domain["is_folder"]]
             for domain in domains:
                 if domain['name'] not in allowed_domains:
