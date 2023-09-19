@@ -83,7 +83,13 @@ def get_headers(subdir_folder_path: str) -> list:
     file_path = os.path.join(subdir_folder_path, "headers.json")
     if os.path.isfile(file_path):
         with open(file_path, 'r') as file:
-            return json.load(file)
+            try:
+                json_content = json.load(file)
+            except json.decoder.JSONDecodeError as e:
+                raise AttributeError(f"Could not parse headers.json in '{subdir_folder_path}'") from e
+            if not isinstance(json_content, list):
+                raise AttributeError(f"headers.json in '{subdir_folder_path}' is not a list")
+            return json_content
     else:
         return []
 

@@ -1,12 +1,11 @@
 # BugHog web experiment server
 
 This standalone experiment server is intended to be used in conjunction with [BugHog](https://github.com/DistriNet/BugHog).
-Nevertheless, should you discover other fitting purposes, you are free to use it for those as well.
+However, feel free to use it in any possible way, should you discover other fitting purposes.
 
 If you intend to use this as part of the [BugHog](https://github.com/DistriNet/BugHog) framework, follow the instructions from there.
 
-To add your own custom experiments to the server, follow these instructions.
-
+Instructions to add your own custom experiments to the server can be found [here](experiments/README.md).
 
 ## Usage
 
@@ -44,8 +43,3 @@ To stop the server, execute the following:
 ```bash
 docker-compose down
 ```
-
-
-## Adding custom experiments
-
-
