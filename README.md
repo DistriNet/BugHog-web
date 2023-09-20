@@ -38,6 +38,9 @@ The experiment server is started with:
 docker-compose up
 ```
 
+
+### Stopping
+
 To stop the server, execute the following:
 
 ```bash
