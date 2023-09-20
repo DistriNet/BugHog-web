@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Call this script to create a new certificate, signed by the BugHog CA.
+# Provide one parameter: the domain name of the certificate you want to create.
+
+# The script will ask you for several things (country, state, etc.), but the only thing that really matters is the Common Name.
+# This should be the domain name of the certificate you want to create. Other fields can be left blank.
+# Finally, the script will sign the certificate with the CA key, for which you will need to provide the CA password `dnet`.
+
 NAME=$1
 openssl genrsa -out $NAME.key 2048
 openssl req -new -key $NAME.key -out $NAME.csr
