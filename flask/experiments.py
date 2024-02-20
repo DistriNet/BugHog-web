@@ -3,11 +3,12 @@ import json
 import logging
 import os
 from urllib.parse import urlparse
-import requests
 
+import requests
+from markupsafe import escape
 from page_parser import load_experiment_pages
 
-from flask import Blueprint, escape, make_response, render_template, request, send_file
+from flask import Blueprint, make_response, render_template, request, send_file
 
 ALLOWED_DOMAINS = [
     'leak.test',

@@ -1,6 +1,6 @@
 # Adding Your Own Experiments
 
-To integrate your own experiment into this server, follow the these guidelines.
+To integrate your own experiments into this server, follow these guidelines.
 
 
 ## File structure
@@ -107,7 +107,7 @@ This default behavior is also demonstrated in the example experiment.
 #### Outcome Collection
 
 Experiments can report their outcome by sending a request to `https://[domain]/report/leak?=[leak_identifier]`, where `[domain]` can be any supported domain.
-This outcome data is also transmitted to the BugHog core application and subsequently stored into the database.
+This outcome data is also transmitted to the BugHog core application and subsequently stored in the database.
 
 In the example experiment, a request is made to `https://a.text/report/?leak=cross_site_script_executed` if the experiment detects that the referred cross-site script has been executed (though it should have been blocked due to the `Content-Security-Policy` header in `headers.json`).
 
