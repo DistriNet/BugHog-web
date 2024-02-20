@@ -26,7 +26,7 @@ cd BugHog-web
 2. Build image:
 
 ```bash
-docker-compose build
+docker compose build
 ```
 
 
@@ -35,7 +35,7 @@ docker-compose build
 The experiment server is started with:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 
@@ -44,5 +44,5 @@ docker-compose up
 To stop the server, execute the following:
 
 ```bash
-docker-compose down
+docker compose down
 ```
