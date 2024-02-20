@@ -1,4 +1,4 @@
-FROM python:3.11-slim-buster
+FROM python:3.12-slim-bullseye AS web
 WORKDIR /app
 
 RUN apt update -y && apt install -y \
