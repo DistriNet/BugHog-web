@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: "registry.gitlab.kuleuven.be/distrinet/research/bughog/experiment-server:latest"
+    image: "bughog/web"
     pull_policy: never
     container_name: bh_web
     build: .

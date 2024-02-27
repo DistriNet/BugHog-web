@@ -64,7 +64,8 @@ def report_leak():
     try:
         requests.post(
             f"http://{remote_ip}:5001/report/",
-            json=response_data
+            json=response_data,
+            timeout=5
         )
     except requests.exceptions.ConnectionError:
         print(f'WARNING: Could not propagate request to collector at {remote_ip}:5000')
