@@ -117,9 +117,9 @@ def report_leak_if_contains(expected_header_name: str, expected_header_value: st
         return "Redirect", 307, {"Location": "https://adition.com/report/", "Allow-CSP-From": "*"}
 
 
-@exp_bp.route("/resources/<path:path>")
+@exp_bp.route("/res/<path:path>")
 def resources(path):
-    file_path = os.path.join("/app/static/resources/", path)
+    file_path = os.path.join("/app/static/res/", path)
     if not os.path.isfile(file_path):
         return "Resource not found", 404
     if path.endswith(".swf"):

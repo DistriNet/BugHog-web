@@ -10,4 +10,4 @@ services:
       - "443:443"
     volumes:
       - ./experiments/pages:/experiments/pages
-      - ./experiments/resources:/app/static/resources
+      - ./experiments/res:/app/static/res
