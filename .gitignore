@@ -1,5 +1,5 @@
 experiments/pages/**
-experiments/resources/**
+experiments/res/**
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,pycharm,flask,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,pycharm,flask,python

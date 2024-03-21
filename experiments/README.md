@@ -16,13 +16,13 @@ experiments
 |   |   |-- ...
 |   |-- [project 2]
 |   |-- ...
-|-- resources
+|-- res
 ```
 
 - Experiments are grouped within projects inside the `pages` folder, representing sets of related experiments.
 
-- The `resources` folder is intended to host resources that are used by multiple experiments and/or projects (e.g., scripts, images, videos)
-Every resource is hosted on supported domains.
+- The `res` folder is intended to host resources that are used by multiple experiments and/or projects (e.g., scripts, images, videos)
+Every resource is hosted on all supported domains.
 
 
 ## Experiments
@@ -122,10 +122,10 @@ Detecting unvisited sanity check URLs can help identify failed experiments and p
 
 ## Resources
 
-The `resources` folder is intended to host resources shared between projects (e.g., images, videos, scripts).
+The `res` folder is intended to host resources shared between projects (e.g., images, videos, scripts).
 All resources are hosted on each supported domain.
 
-The example resource `experiments/resources/example.html` is hosted at the endpoints `https://[domain]/resources/example.html`, where `[domain]` can be any supported domain.
+The example resource `experiments/res/example.html` is hosted at the endpoints `https://[domain]/res/example.html`, where `[domain]` can be any supported domain.
 
 
 ## Additional help
