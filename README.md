@@ -1,3 +1,8 @@
+# ⚠️ This repository is deprecated ⚠️
+
+BugHog-web has been merged with [BugHog](https://github.com/DistriNet/BugHog/).
+
+
 # BugHog web experiment server
 
 This standalone experiment server is intended to be used in conjunction with [BugHog](https://github.com/DistriNet/BugHog).
